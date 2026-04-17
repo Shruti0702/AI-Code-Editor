@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>{{ problem.title }}</h2>
+    <p><strong>Difficulty:</strong> {{ problem.difficulty }}</p>
+    <pre>{{ problem.statement }}</pre>
+
+    <h3>Starter Code</h3>
+    <pre>{{ problem.starter_code }}</pre>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Coding Platform</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f1117;
+            color: white;
+        }
+        nav {
+            background: #161b22;
+            padding: 12px 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            padding: 20px;
+        }
+        input, textarea, select, button {
+            padding: 10px;
+            margin: 8px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background: #238636;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2ea043;
+        }
+        .card {
+            background: #161b22;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        pre {
+            background: #000;
+            color: #00ff88;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/editor/">Editor</a>
+    <a href="/problems/">Problems</a>
+    <a href="/submissions/">Submissions</a>
+
+    {% if user.is_authenticated %}
+        <span>Hi, {{ user.username }}</span>
+        <form method="post" action="/accounts/logout/" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+        </form>
+        
+    {% else %}
+        <a href="/accounts/login/">Login</a>
+        <a href="/accounts/signup/">Signup</a>
+    {% endif %}
+</nav>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

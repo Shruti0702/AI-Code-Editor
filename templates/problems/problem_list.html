@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Problems</h2>
+
+{% for problem in problems %}
+    <div class="card">
+        <h3>
+            <a href="/problems/{{ problem.slug }}/" style="color:white;">
+                {{ problem.title }}
+            </a>
+        </h3>
+        <p>Difficulty: {{ problem.difficulty }}</p>
+    </div>
+{% empty %}
+    <p>No problems added yet.</p>
+{% endfor %}
+{% endblock %}

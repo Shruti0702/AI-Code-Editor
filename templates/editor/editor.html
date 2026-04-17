@@ -1,0 +1,119 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Code Editor</h2>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+
+<div class="card">
+    <label>Language</label>
+    <select id="language">
+        <option value="python">Python</option>
+    </select>
+
+    <label>Code Editor</label>
+    <div id="container" style="height: 400px; border: 1px solid #444;"></div>
+
+    <label>Custom Input</label>
+    <textarea id="stdin" rows="5" placeholder="Enter input here"></textarea>
+
+    <label>Snippet Title</label>
+    <input type="text" id="snippetTitle" placeholder="Enter title to save snippet">
+
+    <button onclick="runCode()">Run Code</button>
+    <button onclick="explainError()">Explain Error with AI</button>
+    <button onclick="saveSnippet()">Save Snippet</button>
+</div>
+
+<div class="card">
+    <h3>Output</h3>
+    <pre id="runOutput"></pre>
+</div>
+
+<div class="card">
+    <h3>Error</h3>
+    <pre id="errorOutput"></pre>
+</div>
+
+<script>
+let editor;
+
+require.config({
+    paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs" }
+});
+
+require(["vs/editor/editor.main"], function () {
+    editor = monaco.editor.create(document.getElementById("container"), {
+        value: "print('Hello, Shruti!')",
+        language: "python",
+        theme: "vs-dark",
+        automaticLayout: true
+    });
+});
+
+function runCode() {
+    const code = editor.getValue();
+    const stdin = document.getElementById("stdin").value;
+
+    fetch("/editor/run/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            code: code,
+            stdin: stdin
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("runOutput").innerText = data.output || "";
+        document.getElementById("errorOutput").innerText = data.error || "";
+    });
+}
+
+function saveSnippet() {
+    const code = editor.getValue();
+    const title = document.getElementById("snippetTitle").value;
+    const language = document.getElementById("language").value;
+
+    fetch("/editor/save/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            code: code,
+            language: language
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || data.error);
+    });
+}
+
+function explainError() {
+    const code = editor.getValue();
+    const error = document.getElementById("errorOutput").innerText;
+
+    fetch("/ai/explain-error/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            code: code,
+            error: error
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.explanation || data.error);
+    });
+}
+
+</script>
+{% endblock %}

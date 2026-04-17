@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Saved Snippets</h2>
+
+{% for snippet in snippets %}
+    <div class="card">
+        <h3>{{ snippet.title }}</h3>
+        <p><strong>Language:</strong> {{ snippet.language }}</p>
+        <pre>{{ snippet.code }}</pre>
+    </div>
+{% empty %}
+    <p>No snippets saved yet.</p>
+{% endfor %}
+{% endblock %}

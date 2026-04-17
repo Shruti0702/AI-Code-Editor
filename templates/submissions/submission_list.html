@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Submissions</h2>
+
+{% for submission in submissions %}
+    <div class="card">
+        <p><strong>Status:</strong> {{ submission.status }}</p>
+        <p><strong>Time:</strong> {{ submission.created_at }}</p>
+        <h4>Code</h4>
+        <pre>{{ submission.code }}</pre>
+        <h4>Output</h4>
+        <pre>{{ submission.output }}</pre>
+        <h4>Error</h4>
+        <pre>{{ submission.error }}</pre>
+    </div>
+{% empty %}
+    <p>No submissions yet.</p>
+{% endfor %}
+{% endblock %}
