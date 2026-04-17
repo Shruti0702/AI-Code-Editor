@@ -20,6 +20,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#good job
-well done
+firse aagyi mai github seekhne
